@@ -1,0 +1,475 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+/* ─── Design tokens ─────────────────────────────────────────── */
+:root {
+  --bg0: #060c1a;
+  --btn: #3b7cff;
+  --btn2: #1a4de8;
+  --shadow: rgba(0, 0, 0, 0.55);
+  --ui: #e8f0ff;
+  --ui2: #7fa8ff;
+  --accent: #60a5fa;
+  --glow-btn: rgba(59, 124, 255, 0.45);
+  --glow-acc: rgba(96, 165, 250, 0.35);
+  --panel-bg: linear-gradient(160deg, rgba(14, 32, 90, 0.78) 0%, rgba(5, 10, 28, 0.84) 100%);
+  --row-bg: rgba(5, 12, 32, 0.35);
+}
+
+/* ─── Keyframes ─────────────────────────────────────────────── */
+@keyframes titleGlow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.2));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.55));
+  }
+}
+
+@keyframes topShimmer {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes btnShimmer {
+  0% {
+    background-position: 200% center;
+  }
+
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(1.28);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes badgeFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ─── Base ──────────────────────────────────────────────────── */
+html,
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  margin: 0;
+  height: 100%;
+  color: var(--ui);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background:
+    radial-gradient(ellipse 1100px 600px at 38% 8%, #0d2a5a 0%, var(--bg0) 55%, #010810 100%);
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+#wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: transparent;
+}
+
+/* ─── Overlay screens ───────────────────────────────────────── */
+.screen {
+  inset: 0;
+  position: absolute;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  filter: blur(8px);
+  transition:
+    opacity 340ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 340ms cubic-bezier(0.4, 0, 0.2, 1),
+    filter 340ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.screen.on {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+/* ─── Panel ─────────────────────────────────────────────────── */
+.panel {
+  position: relative;
+  padding: 22px;
+  width: min(520px, 96vw);
+  overflow: hidden;
+
+  background: var(--panel-bg);
+  backdrop-filter: blur(22px) saturate(1.3);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  box-shadow:
+    0 36px 90px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(96, 165, 250, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Animated shimmer stripe across the top edge */
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(147, 197, 253, 0.8) 50%,
+      transparent 100%);
+  animation: topShimmer 3.6s ease-in-out infinite;
+}
+
+/* ─── Title row ─────────────────────────────────────────────── */
+.titleRow {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: 0.4px;
+  background: linear-gradient(135deg, #e8f4ff 0%, #93c5fd 45%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+.sub {
+  margin-top: 8px;
+  color: rgba(234, 242, 255, 0.68);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+/* Big score number top-right */
+.bigNum {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow:
+    0 0 20px rgba(96, 165, 250, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* ─── Grade badge ───────────────────────────────────────────── */
+.gradeBadge {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 3px 11px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #93c5fd;
+  background: rgba(59, 124, 255, 0.18);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  border-radius: 999px;
+  animation: badgeFade 350ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ─── Score pills row ───────────────────────────────────────── */
+.row {
+  margin: 14px 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pill {
+  padding: 14px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 5px;
+
+  background: rgba(4, 10, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.pill:hover {
+  transform: translateY(-3px);
+  border-color: rgba(96, 165, 250, 0.3);
+  box-shadow: 0 10px 28px rgba(59, 124, 255, 0.14);
+}
+
+.pill .k {
+  color: rgba(234, 242, 255, 0.55);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.pill .v {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+/* Number pop animation triggered by JS class */
+.pill .v.pop {
+  animation: popIn 280ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ─── Button ────────────────────────────────────────────────── */
+button {
+  position: relative;
+  padding: 14px 16px;
+  width: 100%;
+  overflow: hidden;
+
+  color: white;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+
+  background: linear-gradient(135deg, #3b7cff 0%, #1a4de8 100%);
+  border: none;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 28px rgba(59, 124, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+
+  cursor: pointer;
+  appearance: none;
+  transition: transform 150ms ease, box-shadow 220ms ease;
+}
+
+/* Shimmer sweep on hover */
+button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.18) 50%,
+      transparent 70%);
+  background-size: 250% 100%;
+  background-position: 200% center;
+  transition: background-position 480ms ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 42px rgba(59, 124, 255, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+button:hover::after {
+  background-position: -200% center;
+}
+
+button:active {
+  transform: translateY(1px) scale(0.985);
+  box-shadow: 0 4px 18px rgba(59, 124, 255, 0.28);
+}
+
+/* ─── Toggle rows ───────────────────────────────────────────── */
+.togRow {
+  margin-top: 10px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  background: var(--row-bg);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  transition: background 220ms ease, border-color 220ms ease;
+}
+
+.togRow:hover {
+  background: rgba(10, 24, 62, 0.5);
+  border-color: rgba(96, 165, 250, 0.2);
+}
+
+.toggleWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tLabel {
+  color: rgba(234, 242, 255, 0.82);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ─── Sound switch ──────────────────────────────────────────── */
+.switch {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  flex: 0 0 auto;
+
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 999px;
+
+  cursor: pointer;
+  transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.switch:hover {
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.18);
+}
+
+.switch.on {
+  background: linear-gradient(135deg, rgba(59, 124, 255, 0.55) 0%, rgba(99, 102, 241, 0.45) 100%);
+  border-color: rgba(59, 124, 255, 0.65);
+  box-shadow: 0 0 14px rgba(59, 124, 255, 0.3);
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  transform: translateY(-50%);
+  transition: left 230ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.switch.on .knob {
+  left: 22px;
+}
+
+/* ─── Face select ───────────────────────────────────────────── */
+.faceSelectWrap {
+  display: flex;
+  align-items: center;
+}
+
+#faceSelect,
+#faceSelect2 {
+  padding: 8px 30px 8px 12px;
+  min-width: 155px;
+
+  color: #e8f0ff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  background-color: rgba(5, 12, 32, 0.62);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2393C5FD' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+
+  cursor: pointer;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+#faceSelect:hover,
+#faceSelect2:hover {
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+#faceSelect:focus,
+#faceSelect2:focus {
+  border-color: rgba(96, 165, 250, 0.75);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+/* ─── Hint row ──────────────────────────────────────────────── */
+.hintRow {
+  position: relative;
+  margin-top: 10px;
+  padding: 10px 14px 10px 36px;
+
+  color: rgba(234, 242, 255, 0.62);
+  font-size: 12px;
+  line-height: 1.55;
+
+  background: rgba(96, 165, 250, 0.05);
+  border: 1px solid rgba(96, 165, 250, 0.1);
+  border-radius: 12px;
+}
+
+.hintRow::before {
+  content: '💡';
+  position: absolute;
+  left: 11px;
+  top: 9px;
+  font-size: 13px;
+}
+
+/* ─── Screen-reader only ────────────────────────────────────── */
+.srOnly {
+  position: absolute;
+  margin: -1px;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
