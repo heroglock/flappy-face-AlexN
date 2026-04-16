@@ -38,7 +38,6 @@
   birdImg.onload = () => { birdImgLoaded = true; };
   const FACE_SOURCES = {
     navalny: "faces/navalny.png",
-    lord: "faces/lord.png",
     rem: "faces/rem.png",
   };
   function setFace(id, persist) {
